@@ -1,0 +1,51 @@
+body {
+  background: #111;
+  color: #fff;
+  font-family: sans-serif;
+  text-align: center;
+  padding: 20px;
+}
+.container {
+  max-width: 320px;
+  margin: 0 auto;
+}
+.roulette {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0;
+}
+.reel {
+  width: 60px; height: 60px;
+  line-height: 60px;
+  background: #222;
+  border: 2px solid #444;
+  border-radius: 8px;
+  font-size: 18px;
+  user-select: none;
+}
+.pointer {
+  position: absolute;
+  left: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 24px;
+  color: #0f0;
+}
+button {
+  background: #28a745;
+  border: none;
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+button:disabled {
+  background: #555;
+  cursor: default;
+}
+#msg {
+  margin-top: 10px;
+  font-size: 16px;
+}
