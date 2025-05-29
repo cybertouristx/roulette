@@ -1,24 +1,18 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <title>Рулетка бонусов</title>
-  <link rel="stylesheet" href="style.css" />
-  <!-- Telegram Web App -->
+  <meta charset="UTF-8">
+  <title>Рулетка выплат</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Telegram WebApp -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-  <div class="container">
-    <h2>Мега-бонуска</h2>
-    <p>У вас попыток: <span id="tries">1</span></p>
-
+  <div id="slot">
+    <h2>Осталось попыток: <span id="tries">1</span></h2>
     <div class="roulette">
-      <div class="reel" id="r1">—</div>
-      <div class="reel" id="r2">—</div>
-      <div class="reel" id="r3">—</div>
-      <div class="pointer">▶</div>
+      <div id="wheel" class="wheel-text">— ₽</div>
     </div>
-
     <button id="spin">Крутить</button>
     <p id="msg"></p>
   </div>
