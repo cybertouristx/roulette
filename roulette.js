@@ -1,52 +1,51 @@
-const prizes = ["50₽","100₽","500₽","1 000₽","5 000₽","25 000₽"];
-let tries = 1;
+// roulette.js
 
-const r1 = document.getElementById("r1");
-const r2 = document.getElementById("r2");
-const r3 = document.getElementById("r3");
-const btn = document.getElementById("spin");
-const msg = document.getElementById("msg");
-const triesLabel = document.getElementById("tries");
-
-// Telegram WebApp
+// Получаем WebApp-объект
 const tg = window.Telegram.WebApp;
 tg.expand();
 
-btn.addEventListener("click", () => {
-  if (tries <= 0) return;
+// набор призов в рублях
+const prizes = [50, 100, 500, 1000, 25000];
+
+// сколько миллисекунд длится прокрутка
+const SPIN_DURATION = 3000;
+
+// финальный приз (всегда 100 ₽)
+const FINAL_PRIZE = 100;
+
+// находим индекс финального приза
+const finalIndex = prizes.indexOf(FINAL_PRIZE);
+
+// элементы DOM
+const btn  = document.getElementById('spin');
+const msg  = document.getElementById('msg');
+const wheel= document.getElementById('wheel');
+
+// вешаем обработчик на кнопку
+btn.addEventListener('click', () => {
   btn.disabled = true;
-  msg.textContent = "";
+  msg.textContent = 'Крутится…';
 
-  // функция анимации одного барабана
-  function spinReel(el) {
-    return new Promise(res => {
-      let count = 0;
-      const interval = setInterval(() => {
-        el.textContent = prizes[Math.floor(Math.random() * prizes.length)];
-        if (++count > 15) {
-          clearInterval(interval);
-          setTimeout(res, 200);
-        }
-      }, 60);
-    });
-  }
+  const start = Date.now();
+  const tick  = () => {
+    // рекурсивно обновляем случайный сектор
+    const idx = Math.floor(Math.random() * prizes.length);
+    wheel.textContent = prizes[idx] + ' ₽';
 
-  spinReel(r1)
-    .then(() => spinReel(r2))
-    .then(() => spinReel(r3))
-    .then(() => {
-      tries--;
-      triesLabel.textContent = tries;
-      const won = r2.textContent; // средний барабан
+    if (Date.now() - start < SPIN_DURATION) {
+      requestAnimationFrame(tick);
+    } else {
+      // по окончании анимации показываем именно FINAL_PRIZE
+      wheel.textContent = FINAL_PRIZE + ' ₽';
+      msg.textContent = `🎉 Вы выиграли ${FINAL_PRIZE} ₽!`;
 
-      if (tries === 0) {
-        msg.innerHTML = `🎉 Вы выиграли <b>${won}</b>!`;
-        tg.sendData(JSON.stringify({
-          event: "bonus_roulette",
-          prize: won
-        }));
-      }
+      // уведомляем Telegram-бота
+      tg.sendData(JSON.stringify({
+        event: 'roulette_result',
+        prize: FINAL_PRIZE
+      }));
+    }
+  };
 
-      btn.disabled = tries === 0;
-    });
+  tick();
 });
